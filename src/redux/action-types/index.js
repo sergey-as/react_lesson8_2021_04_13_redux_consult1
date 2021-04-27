@@ -8,6 +8,8 @@ const INC_TWO = 'INC_TWO';
 const DEC_TWO = 'DEC_TWO';
 const RESET_TWO = 'RESET_TWO';
 
+const ON_USERS_LOADED = 'ON_USERS_LOADED';
+
 export {
     INC_CUSTOM,
     INC,
@@ -18,4 +20,6 @@ export {
     INC_TWO,
     DEC_TWO,
     RESET_TWO,
+
+    ON_USERS_LOADED,
 }

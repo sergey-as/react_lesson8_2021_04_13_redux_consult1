@@ -33,7 +33,7 @@ const reducer = (state = initialState, action) => {
             }
         }
         default:
-            console.log('action', action.type, 'does not exist');
+            // console.log('action', action.type, 'does not exist');
             return state;
     }
 }

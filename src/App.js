@@ -3,7 +3,7 @@
 //
 
 import './App.css';
-
+import {useEffect} from 'react';
 import {useSelector, useDispatch} from "react-redux";
 
 import {
@@ -12,6 +12,39 @@ import {
     decAction,
     resetAction,
 } from './redux/action-creators'
+
+import {ON_USERS_LOADED} from './redux/action-types/index'
+
+const PhotosList = () => {
+    const dispatch = useDispatch();
+    const users = useSelector(({userReducer: {users}}) => users)
+
+    const fetchPhotos = async () => {
+        // const resp = await fetch('https://jsonplaceholder.typicode.com/photos');
+        const resp = await fetch('https://dummyapi.io/data/api/user?limit=10', {
+            headers: {
+                'app-id': 'lTE5abbDxdjGplutvTuc'
+            }
+        });
+        const json = await resp.json();
+        console.log(json);
+
+        dispatch({type: ON_USERS_LOADED, payload: json.data})
+    }
+
+    useEffect(() => {
+        fetchPhotos()
+    }, [])
+
+    return (
+        // <h1>PhotosList</h1>
+        <div>
+            {users.map(el =>(
+                <img key={el.id} src={el.picture} alt={el.firstName}/>
+            ))}
+        </div>
+    )
+}
 
 export default function App() {
     // const store = useSelector((store) => {
@@ -31,7 +64,7 @@ export default function App() {
 
     // const counter1 = useSelector(({counter1: {counter}}) => counter);
     // const counter2 = useSelector(({counter2: {counter}}) => counter);
-    const {counter1,counter2} = useSelector(({counter1,counter2}) => ({
+    const {counter1, counter2} = useSelector(({counter1, counter2}) => ({
         counter1: counter1.counter,
         counter2: counter2.counter,
     }))
@@ -40,6 +73,8 @@ export default function App() {
 
     return (
         <div className="App">
+            {!(counter1 % 2) && <PhotosList/>}
+
             <h1>{counter1} - 1</h1>
             <h1>{counter2} - 2</h1>
             {/*<button onClick={() => dispatch({type: INC_CUSTOM, payload: 102})}>inc custom</button>*/}
