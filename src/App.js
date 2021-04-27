@@ -11,13 +11,15 @@ import {
     incAction,
     decAction,
     resetAction,
+    onUserLoaded,
+    onAddToBad,
+    onRemoveFromBad,
 } from './redux/action-creators'
-
-import {ON_USERS_LOADED} from './redux/action-types/index'
 
 const PhotosList = () => {
     const dispatch = useDispatch();
     const users = useSelector(({userReducer: {users}}) => users)
+    const badEmploees = useSelector(({userReducer: {badEmploees}}) => badEmploees)
 
     const fetchPhotos = async () => {
         // const resp = await fetch('https://jsonplaceholder.typicode.com/photos');
@@ -27,20 +29,38 @@ const PhotosList = () => {
             }
         });
         const json = await resp.json();
-        console.log(json);
+        // console.log(json);
 
-        dispatch({type: ON_USERS_LOADED, payload: json.data})
+        dispatch(onUserLoaded(json.data))
     }
 
     useEffect(() => {
-        fetchPhotos()
+        if (!users.length) {
+            fetchPhotos()
+        }
     }, [])
 
     return (
         // <h1>PhotosList</h1>
         <div>
-            {users.map(el =>(
-                <img key={el.id} src={el.picture} alt={el.firstName}/>
+            {users.map(el => (
+                <img
+                    style={{
+                        filter: badEmploees.includes(el.id) ? "blur(3px)" : ''
+                    }}
+                    onClick={() => {
+                        const alredyInList = badEmploees.includes(el.id)
+                        const answer = !alredyInList && window.confirm('точно кікнути людну?')
+                        if (answer){
+
+                        return dispatch(onAddToBad(el.id))
+                        }
+                        alredyInList && dispatch(onRemoveFromBad(el.id))
+                    }
+                    }
+                    key={el.id}
+                    src={el.picture}
+                    alt={el.firstName}/>
             ))}
         </div>
     )
