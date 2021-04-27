@@ -1,6 +1,6 @@
 // https://www.youtube.com/watch?v=kxz5vDOtgzI
 // Redux-consult-1
-//
+// 30:15
 
 import './App.css';
 import {useEffect} from 'react';
